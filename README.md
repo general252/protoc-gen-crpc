@@ -38,3 +38,10 @@ func main() {
 }
 
 ```
+
+
+- install (like [GRPC](https://www.grpc.io/docs/languages/go/quickstart/))
+```
+go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28
+go install github.com/general252/protoc-gen-crpc
+```
