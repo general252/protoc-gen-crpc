@@ -11,7 +11,7 @@ func init() {
 }
 
 func main() {
-	lib := `C:\Users\tony\Desktop\crpc\protoc-gen-crpc\bin\dyc.dll`
+	lib := `your_library_path/library-name.dll`
 	conn := helloworld.NewGreeterLibrary(lib)
 
 	if err := conn.Load(); err != nil {
