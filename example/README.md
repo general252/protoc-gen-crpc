@@ -1,5 +1,6 @@
 - c库需要导出的函数
 
+./clay/helloworld_app.h
 ```
 int32_t crpc_call(char* data, int32_t length) {
     return 0;
@@ -7,7 +8,7 @@ int32_t crpc_call(char* data, int32_t length) {
 
 ```
 
-- 在proto文件中添加一下作为通信协议
+- 在proto文件中添加CRPCProtocol作为通信协议
 
 ```
 
