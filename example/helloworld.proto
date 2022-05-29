@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+option go_package = "google.golang.org/grpc/examples/helloworld/helloworld";
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.golay";
+option java_outer_classname = "helloworld";
+
+package helloworld;
+
+// The greeting service definition.
+service Greeter {
+  // Sends a greeting
+  rpc SayHello (HelloRequest) returns (HelloReply) {}
+
+  // 你好
+  rpc Hello(A) returns(B) {}
+}
+
+// The request message containing the user's name.
+message HelloRequest {
+  string name = 1;
+  int32  age = 2;
+}
+
+// The response message containing the greetings
+message HelloReply {
+  string message = 1;
+}
+
+message A {
+  string a = 1;
+}
+
+message B {
+  string  b = 1;
+}
+
+
+
+message CRPCProtocol {
+  enum ErrorCode {
+    Unknown = 0;
+    OK = 1;
+    Fail = 2;
+    Unimplemented = 3;
+  }
+
+  string method = 1; // 方法
+  uint64 funHandle = 2; // 回调函数
+  bytes request = 3; // 请求
+  bytes response = 4; // 回复
+
+  ErrorCode code = 10;
+  string msg = 11;
+
+  message Inner {
+    string method = 1;
+    uint64 callback = 2;
+  }
+  Inner inner = 100; // 内部
+}

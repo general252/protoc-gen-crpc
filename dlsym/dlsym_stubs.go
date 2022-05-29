@@ -1,0 +1,74 @@
+//go:build (linux && cgo) || (darwin && cgo) || (freebsd && cgo)
+
+package dlsym
+
+/*
+#cgo linux LDFLAGS: -ldl
+#include <dlfcn.h>
+#include <limits.h>
+#include <stdlib.h>
+#include <stdint.h>
+
+#include <stdio.h>
+
+static uintptr_t dlsymOpen(const char* path, char** err) {
+	void* h = dlopen(path, RTLD_NOW|RTLD_GLOBAL);
+	if (h == NULL) {
+		*err = (char*)dlerror();
+	} else {
+		printf("library handle: %llX\n", (uintptr_t)h);
+	}
+
+	return (uintptr_t)h;
+}
+
+static uintptr_t dlsymLookup(uintptr_t h, const char* name, char** err) {
+	void* r = dlsym((void*)h, name);
+	if (r == NULL) {
+		printf("lib handle: %llX name: %s\n", h, name);
+		*err = (char*)dlerror();
+	}
+	return (uintptr_t)r;
+}
+
+static int dlsymClose(uintptr_t h) {
+	printf("library handle close: %llX\n", h);
+	dlclose((void*)h);
+	return 0;
+}
+*/
+import "C"
+
+import (
+	"errors"
+	"reflect"
+	"unsafe"
+)
+
+func openSym(name string) (*DlSym, error) {
+	var cErr *C.char
+	var cPath = (*C.char)(unsafe.Pointer((*reflect.StringHeader)(unsafe.Pointer(&name)).Data))
+
+	h := C.dlsymOpen((*C.char)(unsafe.Pointer(&cPath[0])), &cErr)
+	if h == 0 {
+		return nil, errors.New(`dlsym.Open("` + name + `"): ` + C.GoString(cErr))
+	}
+
+	return newDlSym(uintptr(h)), nil
+}
+
+func closeSym(p *DlSym) {
+	C.dlsymClose(C.uintptr_t(p.h))
+}
+
+func lookupSym(p *DlSym, symName string) (uintptr, error) {
+	var cErr *C.char
+	var in = (*C.char)(unsafe.Pointer((*reflect.StringHeader)(unsafe.Pointer(&symName)).Data))
+
+	v := C.dlsymLookup(C.uintptr_t(p.h), in, &cErr)
+	if v == nil {
+		return uintptr(0), errors.New(`lookup("` + symName + `"): ` + C.GoString(cErr))
+	}
+
+	return uintptr(v), nil
+}

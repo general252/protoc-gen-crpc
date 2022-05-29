@@ -1,0 +1,10 @@
+/go.sum
+/bin/libprotobuf-lited.dll
+/bin/libprotobufd.dll
+/bin/dyc.dll
+/bin/dyc.exp
+/bin/dyc.lib
+/bin/dyc.pdb
+/bin/example.exe
+/example/clay/dyc.cpp
+/example/clay/dyc.h
