@@ -48,10 +48,9 @@ void go_server(const helloworld::CRPCProtocol& request, helloworld::CRPCProtocol
 
 DYC_API int crpc_call(char* data, int32_t length)
 {
-    printf("----crpc_call----\n");
-
     helloworld::CRPCProtocol request;
     if (!request.ParseFromArray(data, length)) {
+        printf("parse CRPCProtocol fail.\n");
         return -1;
     }
 
@@ -71,23 +70,23 @@ DYC_API int crpc_call(char* data, int32_t length)
         }
         else {
             response.set_code(helloworld::CRPCProtocol_ErrorCode_Fail);
+            response.set_msg("unknown method " + inner.method());
         }
 
         go_callback(request, response);
     }
     else
     {
-        printf("ssss %s\n", request.method().data());
-        {{range .Services}}
-
+      {{range .Services}}
         if (std::string::npos != request.method().find("/{{.PacketName}}.{{.ServiceName}}/")) {
             Get{{.ServiceName}}Service()->OnInvoke(request, response);
+            go_callback(request, response);
+            return 0;
         }
+      {{end}}
 
-        {{end}}
-
-        go_callback(request, response);
+        response.set_code(helloworld::CRPCProtocol_ErrorCode_Unimplemented);
+        response.set_msg("unknown service " + request.method());
+        return 0;
     }
-
-    return 0;
 }

@@ -218,10 +218,10 @@ func (c *Library) init() (err error) {
 		return err
 	}
 	if CRPCProtocol_OK != res.GetCode() {
-		return errors.New("init fail, " + res.GetCode().String())
+		return errors.New(fmt.Sprintf("set_callback_on_event fail. %v, %v", res.GetCode(), res.GetMsg()))
 	}
 
-	// 设置服务huidiao
+	// 设置服务回调
 	res, err = c.Call(&CRPCProtocol{
 		Inner: &CRPCProtocol_Inner{
 			Method:   set_callback_on_server,
@@ -232,7 +232,7 @@ func (c *Library) init() (err error) {
 		return err
 	}
 	if CRPCProtocol_OK != res.GetCode() {
-		return errors.New("init fail, " + res.GetCode().String())
+		return errors.New(fmt.Sprintf("set_callback_on_server fail. %v, %v", res.GetCode(), res.GetMsg()))
 	}
 
 	// 初始化成功后保存

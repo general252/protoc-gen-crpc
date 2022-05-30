@@ -2,8 +2,9 @@ package main
 
 import (
 	"context"
-	helloworld "example/golay"
 	"log"
+
+	helloworld "example/golay"
 )
 
 func init() {
@@ -11,9 +12,8 @@ func init() {
 }
 
 func main() {
-	lib := `your_library_path/library-name.dll`
+	lib := `dyc.dll`
 	conn := helloworld.NewGreeterLibrary(lib)
-
 	if err := conn.Load(); err != nil {
 		log.Println(err)
 		return

@@ -3,6 +3,7 @@ package helloworld
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -13,11 +14,11 @@ import (
 )
 
 type GreeterLibrary struct {
-	libraryName string
-	lib         *call.Library
+	libraryName string        // c库路径
+	lib         *call.Library // c库
 
-	desc *grpc.ServiceDesc
-	impl GreeterServer
+	desc *grpc.ServiceDesc // 服务描述
+	impl GreeterServer     // 服务实现
 }
 
 func NewGreeterLibrary(name string) *GreeterLibrary {
@@ -102,7 +103,7 @@ func (c *GreeterLibrary) call(method string, args interface{}, reply proto.Messa
 	}
 
 	if resp.GetCode() != call.CRPCProtocol_OK {
-		return errors.New(resp.GetCode().String())
+		return errors.New(fmt.Sprintf("Call fail. [%v] %v, %v", method, resp.GetCode(), resp.GetMsg()))
 	}
 
 	if err = proto.Unmarshal(resp.GetResponse(), reply); err != nil {
