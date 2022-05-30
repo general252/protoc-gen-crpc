@@ -3,10 +3,9 @@ module example
 go 1.18
 
 require (
-	github.com/general252/c2go v1.0.1
+	github.com/general252/protoc-gen-crpc v1.0.0
 	google.golang.org/grpc v1.46.2
 	google.golang.org/protobuf v1.28.0
-	github.com/general252/protoc-gen-crpc v1.0.0
 )
 
 require (
@@ -17,6 +16,4 @@ require (
 	google.golang.org/genproto v0.0.0-20200526211855-cb27e3aa2013 // indirect
 )
 
-replace (
-	github.com/general252/protoc-gen-crpc v1.0.0 => C:\Users\tony\Desktop\crpc\protoc-gen-crpc
-)
+replace github.com/general252/protoc-gen-crpc v1.0.0 => ../
