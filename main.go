@@ -3,13 +3,14 @@ package main
 import (
 	"flag"
 	"fmt"
-	"google.golang.org/protobuf/compiler/protogen"
-	"google.golang.org/protobuf/types/pluginpb"
 	"log"
 	"time"
-)
 
-const Version = "0.1.1"
+	"google.golang.org/protobuf/compiler/protogen"
+	"google.golang.org/protobuf/types/pluginpb"
+
+	"github.com/general252/protoc-gen-crpc/static"
+)
 
 var requireUnimplemented *bool
 
@@ -26,7 +27,7 @@ func main() {
 	showVersion := flag.Bool("version", false, "print the version and exit")
 	flag.Parse()
 	if *showVersion {
-		fmt.Printf("protoc-gen-go-grpc %v\n", Version)
+		fmt.Printf("protoc-gen-go-grpc %v\n", static.Version)
 		return
 	}
 

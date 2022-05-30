@@ -4,6 +4,8 @@ import (
 	_ "embed"
 )
 
+var Version = "0.1.1"
+
 //go:embed golay/hello.gotpl
 var helloGoTpl []byte
 
