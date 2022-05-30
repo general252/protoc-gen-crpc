@@ -123,6 +123,7 @@ void cpp_invoke({{.PacketName}}::CRPCProtocol& request, {{.PacketName}}::CRPCPro
         }
 
         cpp_on_invoke(request, response);
+        return 0;
     }
     else
     {
