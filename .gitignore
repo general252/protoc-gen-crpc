@@ -8,3 +8,4 @@
 /bin/example.exe
 /example/clay/dyc.cpp
 /example/clay/dyc.h
+/bin/protoc-gen-crpc.exe
