@@ -1,4 +1,4 @@
-#include "{{.PacketName}}_client.h"
+#include "{{.GeneratedFilenamePrefix}}_client.h"
 
 {{range .Services}}
 

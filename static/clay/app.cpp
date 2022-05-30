@@ -1,18 +1,9 @@
+#define {{.ExportHeader}}_EXPORTS
+
 #include "app.h"
-#include "{{.PacketName}}.pb.h"
-#include "{{.PacketName}}_service.h"
-#include "{{.PacketName}}_client.h"
-
-
-#ifdef  _MSC_VER
-#ifdef _DEBUG
-#pragma comment(lib, "lib/debug/lib/libprotobufd.lib")
-#pragma comment(lib, "lib/debug/lib/libprotobuf-lited.lib")
-#else
-#pragma comment(lib, "lib/libprotobuf.lib")
-#pragma comment(lib, "lib/libprotobuf-lite.lib")
-#endif // _DEBUG
-#endif
+#include "{{.GeneratedFilenamePrefix}}.pb.h"
+#include "{{.GeneratedFilenamePrefix}}_service.h"
+#include "{{.GeneratedFilenamePrefix}}_client.h"
 
 
 #define set_callback_on_event  "set_callback_on_event"
@@ -91,7 +82,7 @@ void cpp_invoke({{.PacketName}}::CRPCProtocol& request, {{.PacketName}}::CRPCPro
 }
 
 
-DYC_API int crpc_call(char* data, int32_t length)
+{{.ExportHeader}}_API int crpc_call(char* data, int32_t length)
 {
     {{.PacketName}}::CRPCProtocol request;
     if (!request.ParseFromArray(data, length)) {

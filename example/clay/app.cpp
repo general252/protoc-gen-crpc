@@ -1,19 +1,10 @@
 
+#define HELLOWORLD_EXPORTS
+
 #include "app.h"
 #include "helloworld.pb.h"
 #include "helloworld_service.h"
 #include "helloworld_client.h"
-
-
-#ifdef  _MSC_VER
-#ifdef _DEBUG
-#pragma comment(lib, "lib/debug/lib/libprotobufd.lib")
-#pragma comment(lib, "lib/debug/lib/libprotobuf-lited.lib")
-#else
-#pragma comment(lib, "lib/libprotobuf.lib")
-#pragma comment(lib, "lib/libprotobuf-lite.lib")
-#endif // _DEBUG
-#endif
 
 
 #define set_callback_on_event  "set_callback_on_event"
@@ -92,7 +83,7 @@ void cpp_invoke(helloworld::CRPCProtocol& request, helloworld::CRPCProtocol& res
 }
 
 
-DYC_API int crpc_call(char* data, int32_t length)
+HELLOWORLD_API int crpc_call(char* data, int32_t length)
 {
     helloworld::CRPCProtocol request;
     if (!request.ParseFromArray(data, length)) {

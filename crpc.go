@@ -79,15 +79,19 @@ func generateFileContent(gen *protogen.Plugin, file *protogen.File, g *protogen.
 	}
 
 	type JsonServiceList struct {
-		PacketName    string
-		Services      []JsonService
-		GoService     JsonService
-		NotifyService JsonService
+		ExportHeader            string
+		GeneratedFilenamePrefix string
+		PacketName              string
+		Services                []JsonService
+		GoService               JsonService
+		NotifyService           JsonService
 	}
 
 	// 参数
 	var param = JsonServiceList{
-		PacketName: string(file.GoPackageName),
+		ExportHeader:            strings.ReplaceAll(strings.ToUpper(file.GeneratedFilenamePrefix), "-", "_"),
+		GeneratedFilenamePrefix: file.GeneratedFilenamePrefix,
+		PacketName:              string(file.GoPackageName),
 	}
 
 	for _, s := range file.Services {

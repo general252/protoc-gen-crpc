@@ -1,8 +1,8 @@
 
-#ifdef DYC_EXPORTS
-#define DYC_API __declspec(dllexport)
+#ifdef HELLOWORLD_EXPORTS
+#define HELLOWORLD_API __declspec(dllexport)
 #else
-#define DYC_API __declspec(dllimport)
+#define HELLOWORLD_API __declspec(dllimport)
 #endif
 
 #include <stdint.h>
@@ -15,7 +15,7 @@ extern "C" {
 #endif // __cplusplus
 
 
-DYC_API int crpc_call(char* data, int32_t length);
+HELLOWORLD_API int crpc_call(char* data, int32_t length);
 
 
 #ifdef __cplusplus

@@ -1,5 +1,5 @@
 #pragma once
-#include "{{.PacketName}}.pb.h"
+#include "{{.GeneratedFilenamePrefix}}.pb.h"
 
 typedef void (*fn_cpp_invoke)({{.PacketName}}::CRPCProtocol& request, {{.PacketName}}::CRPCProtocol& response);
 

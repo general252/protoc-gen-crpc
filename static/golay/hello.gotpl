@@ -124,7 +124,7 @@ func (c *{{.ServiceName}}Library) NewStream(ctx context.Context, desc *grpc.Stre
 }
 
 func (c *{{.ServiceName}}Library) RegisterService(desc *grpc.ServiceDesc, impl interface{}) {
-    c.impl = impl.(GreeterServer)
+    c.impl = impl.({{.ServiceName}}Server)
     c.desc = desc
 }
 
