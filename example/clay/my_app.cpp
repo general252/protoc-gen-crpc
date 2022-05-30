@@ -40,7 +40,7 @@ public:
     InitApp() {
     
         static myGreeterServiceImpl insGreeterServiceImpl;
-        SetGreeterServiceImpl(insGreeterServiceImpl);
+        SetGreeterServiceImpl(&insGreeterServiceImpl);
     
     }
 }_init_app;
