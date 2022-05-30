@@ -1,7 +1,6 @@
 package dlsym
 
 import "C"
-import "log"
 
 type DlSym struct {
 	h       uintptr
@@ -13,7 +12,7 @@ func Open(name string) (*DlSym, error) {
 	if err != nil {
 		return nil, err
 	} else {
-		log.Printf("library handle %X", c.h)
+		// log.Printf("library handle %X", c.h)
 	}
 
 	return c, nil

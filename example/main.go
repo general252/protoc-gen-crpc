@@ -15,13 +15,15 @@ type GreeterServer struct {
 	helloworld.UnimplementedGreeterServer
 }
 
-func (tis *GreeterServer) SayHello(context.Context, *helloworld.HelloRequest) (*helloworld.HelloReply, error) {
+func (tis *GreeterServer) SayHello(_ context.Context, req *helloworld.HelloRequest) (*helloworld.HelloReply, error) {
+	log.Printf("recv %v %v", req.GetName(), req.GetAge())
 	return &helloworld.HelloReply{
 		Message: "aaa",
 	}, nil
 }
 
 func (tis *GreeterServer) Hello(ctx context.Context, req *helloworld.A) (*helloworld.B, error) {
+	log.Printf("recv %v", req.GetA())
 	return &helloworld.B{
 		B: "nb+" + req.GetA(),
 	}, nil
