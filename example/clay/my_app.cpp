@@ -1,50 +1,50 @@
-#include "helloworld_service.h"
-#include "helloworld_client.h"
 
-class myService : public GreeterServiceImpl
+#include "helloworld_service.h"
+
+
+#ifdef  _MSC_VER
+#ifdef _DEBUG
+#pragma comment(lib, "lib/debug/lib/libprotobufd.lib")
+#pragma comment(lib, "lib/debug/lib/libprotobuf-lited.lib")
+#else
+#pragma comment(lib, "lib/libprotobuf.lib")
+#pragma comment(lib, "lib/libprotobuf-lite.lib")
+#endif // _DEBUG
+#endif
+
+
+
+class myGreeterServiceImpl : public GreeterServiceImpl
 {
 public:
 
-    virtual void SayHello(const helloworld::HelloRequest& request, helloworld::HelloReply& response);
+  
+    virtual void SayHello(const helloworld::HelloRequest& request,  helloworld::HelloReply& response) {
 
-    virtual void Hello(const helloworld::A& request, helloworld::B& response);
+    }
+  
+    virtual void Hello(const helloworld::A& request,  helloworld::B& response) {
+
+    }
+  
+
 };
 
 
 
-void myService::SayHello(const helloworld::HelloRequest& request, helloworld::HelloReply& response)
-{
-    printf("SayHello 222\n");
-    response.set_message("hello " + request.name());
-
-    helloworld::A req;
-    helloworld::B res;
-
-    req.set_a("aaaaaaaaaaaaaaaaaaaaaaaaaaa");
-
-    GetGreeterClinet()->Hello(req, res);
-
-    printf("res %s\n", res.DebugString().data());
-}
-
-void myService::Hello(const helloworld::A& request, helloworld::B& response)
-{
-    printf("Hello 222\n");
-}
-
-
-
-void init()
-{
-    SetGreeterServiceImpl(new(myService));
-}
 
 
 class InitApp
 {
 public:
     InitApp() {
-        init();
+    
+        static myGreeterServiceImpl insGreeterServiceImpl;
+        SetGreeterServiceImpl(insGreeterServiceImpl);
+    
     }
 }_init_app;
+
+
+
 

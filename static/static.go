@@ -54,3 +54,10 @@ var clientCPP []byte
 func GetClientCpp() string {
 	return string(clientCPP)
 }
+
+//go:embed clay/my_app.cpp
+var myAppCPP []byte
+
+func GetMyAppCPP() string {
+	return string(myAppCPP)
+}

@@ -22,8 +22,10 @@ import (
 	"bytes"
 	"github.com/general252/protoc-gen-crpc/static"
 	"google.golang.org/protobuf/compiler/protogen"
+	"io/fs"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 	"text/template"
 )
@@ -54,6 +56,26 @@ func generateFile(gen *protogen.Plugin, file *protogen.File) *protogen.Generated
 	writeTpl("../clay/"+file.GeneratedFilenamePrefix+"_service.cpp", static.GetServiceCpp())
 	writeTpl("../clay/"+file.GeneratedFilenamePrefix+"_client.h", static.GetClientH())
 	writeTpl("../clay/"+file.GeneratedFilenamePrefix+"_client.cpp", static.GetClientCpp())
+
+	var haveFile = false
+	_ = filepath.WalkDir(".", func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if d.IsDir() {
+			return nil
+		}
+
+		if strings.Contains(path, "my_app.cpp") {
+			haveFile = true
+		}
+
+		return nil
+	})
+	if haveFile {
+	} else {
+		writeTpl("../clay/"+"my_app.cpp", static.GetMyAppCPP())
+	}
 
 	return nil
 }
