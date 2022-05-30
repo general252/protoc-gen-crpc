@@ -38,3 +38,17 @@ var serviceCPP []byte
 func GetServiceCpp() string {
 	return string(serviceCPP)
 }
+
+//go:embed clay/client.h
+var clientH []byte
+
+func GetClientH() string {
+	return string(clientH)
+}
+
+//go:embed clay/client.cpp
+var clientCPP []byte
+
+func GetClientCpp() string {
+	return string(clientCPP)
+}

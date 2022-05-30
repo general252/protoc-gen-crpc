@@ -4,21 +4,21 @@
 
 
 
-static GreeterService* insGreeter = NULL;
-GreeterService* GetGreeterService() {
+static GreeterServiceImpl* insGreeter = NULL;
+GreeterServiceImpl* GetGreeterServiceImpl() {
     if (NULL == insGreeter) {
-        static GreeterService mInsGreeter;
+        static GreeterServiceImpl mInsGreeter;
         return &mInsGreeter;
     }
     return insGreeter;
 }
 
-void SetGreeterService(GreeterService* ins) {
+void SetGreeterServiceImpl(GreeterServiceImpl* ins) {
     insGreeter = ins;
 }
 
 
-void GreeterService::OnInvoke(const helloworld::CRPCProtocol& request, helloworld::CRPCProtocol& response)
+void GreeterServiceImpl::OnInvoke(const helloworld::CRPCProtocol& request, helloworld::CRPCProtocol& response)
 {
 
     if (request.method() == "/helloworld.Greeter/SayHello") {
@@ -64,13 +64,13 @@ void GreeterService::OnInvoke(const helloworld::CRPCProtocol& request, helloworl
 
 
 
-void GreeterService::SayHello(const helloworld::HelloRequest& request, helloworld::HelloReply& response) {
+void GreeterServiceImpl::SayHello(const helloworld::HelloRequest& request, helloworld::HelloReply& response) {
     printf("GreeterService::SayHello un implemented\n");
 }
 
 
 
-void GreeterService::Hello(const helloworld::A& request, helloworld::B& response) {
+void GreeterServiceImpl::Hello(const helloworld::A& request, helloworld::B& response) {
     printf("GreeterService::Hello un implemented\n");
 }
 

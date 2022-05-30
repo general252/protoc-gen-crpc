@@ -41,22 +41,19 @@ func generateFile(gen *protogen.Plugin, file *protogen.File) *protogen.Generated
 		return nil
 	}
 
-	var writeTpl = func(isC bool, name string, text string) {
-		var filename = "../clay/" + file.GeneratedFilenamePrefix + name
-		if !isC {
-			filename = file.GeneratedFilenamePrefix + name
-		}
-
+	var writeTpl = func(filename string, text string) {
 		g := gen.NewGeneratedFile(filename, file.GoImportPath)
 
 		generateFileContent(gen, file, g, text)
 	}
 
-	writeTpl(false, ".go", static.GetGoTpl())
-	writeTpl(true, "_app.h", static.GetAppH())
-	writeTpl(true, "_app.cpp", static.GetAppCpp())
-	writeTpl(true, "_service.h", static.GetServiceH())
-	writeTpl(true, "_service.cpp", static.GetServiceCpp())
+	writeTpl(file.GeneratedFilenamePrefix+".go", static.GetGoTpl())
+	writeTpl("../clay/"+"app.h", static.GetAppH())
+	writeTpl("../clay/"+"app.cpp", static.GetAppCpp())
+	writeTpl("../clay/"+file.GeneratedFilenamePrefix+"_service.h", static.GetServiceH())
+	writeTpl("../clay/"+file.GeneratedFilenamePrefix+"_service.cpp", static.GetServiceCpp())
+	writeTpl("../clay/"+file.GeneratedFilenamePrefix+"_client.h", static.GetClientH())
+	writeTpl("../clay/"+file.GeneratedFilenamePrefix+"_client.cpp", static.GetClientCpp())
 
 	return nil
 }

@@ -4,17 +4,17 @@
 
 {{range .Services}}
 
-class {{.ServiceName}}Service
+class {{.ServiceName}}ServiceImpl
 {
 public:
-    void OnInvoke(const helloworld::CRPCProtocol& request, helloworld::CRPCProtocol& response);
+    void OnInvoke(const {{.PacketName}}::CRPCProtocol& request, {{.PacketName}}::CRPCProtocol& response);
   {{range .Methods}}
     virtual void {{.MethodName}}(const {{.PacketName}}::{{.Input}}& request,  {{.PacketName}}::{{.Output}}& response);
   {{end}}
 };
 
-{{.ServiceName}}Service* Get{{.ServiceName}}Service();
-void Set{{.ServiceName}}Service({{.ServiceName}}Service* ins);
+{{.ServiceName}}ServiceImpl* Get{{.ServiceName}}ServiceImpl();
+void Set{{.ServiceName}}ServiceImpl({{.ServiceName}}ServiceImpl* ins);
 
 {{end}}
 

@@ -5,7 +5,7 @@
 
 
 
-class GreeterService
+class GreeterServiceImpl
 {
 public:
     void OnInvoke(const helloworld::CRPCProtocol& request, helloworld::CRPCProtocol& response);
@@ -16,8 +16,8 @@ public:
   
 };
 
-GreeterService* GetGreeterService();
-void SetGreeterService(GreeterService* ins);
+GreeterServiceImpl* GetGreeterServiceImpl();
+void SetGreeterServiceImpl(GreeterServiceImpl* ins);
 
 
 

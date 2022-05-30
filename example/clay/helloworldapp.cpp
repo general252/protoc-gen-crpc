@@ -80,7 +80,7 @@ DYC_API int crpc_call(char* data, int32_t length)
     {
       
         if (std::string::npos != request.method().find("/helloworld.Greeter/")) {
-            GetGreeterService()->OnInvoke(request, response);
+            GetGreeterServiceImpl()->OnInvoke(request, response);
             go_callback(request, response);
             return 0;
         }

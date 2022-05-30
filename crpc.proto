@@ -22,6 +22,7 @@ message CRPCProtocol {
   message Inner {
     string method = 1;
     uint64 callback = 2;
+    uint64 callbackArgs = 3;
   }
   Inner inner = 100; // 内部
 }

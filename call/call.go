@@ -91,11 +91,12 @@ func FnServerGo(data *C.char, length C.int32_t) C.int32_t {
 					Response: nil,
 					Code:     CRPCProtocol_Fail,
 					Msg:      err.Error(),
-					Inner:    nil,
+					Inner:    request.GetInner(),
 				}
 
 				log.Printf("on server fail. %v", err)
 			}
+			response.Inner = request.GetInner()
 
 			if err = v.OnCall(response); err != nil {
 				log.Printf("on call fail. %v", err)
@@ -135,8 +136,8 @@ func NewLibrary(name string, onServer OnLibraryServer) *Library {
 }
 
 // OnCall 回复调用者
-func (c *Library) OnCall(req *CRPCProtocol) error {
-	data, err := proto.Marshal(req)
+func (c *Library) OnCall(res *CRPCProtocol) error {
+	data, err := proto.Marshal(res)
 	if err != nil {
 		return err
 	}

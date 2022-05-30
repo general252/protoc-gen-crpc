@@ -46,13 +46,14 @@ func (c *GreeterLibrary) onServer(request *call.CRPCProtocol) (*call.CRPCProtoco
 		err   error
 		reply interface{}
 		dec   = func(v interface{}) error {
-			return proto.Unmarshal(request.GetResponse(), v.(proto.Message))
+			return proto.Unmarshal(request.GetRequest(), v.(proto.Message))
 		}
 	)
 
 	// 匹配服务函数
 	for _, method := range c.desc.Methods {
-		if method.MethodName == request.GetMethod() {
+		methodName := fmt.Sprintf("/%s/%s", c.desc.ServiceName, method.MethodName)
+		if methodName == request.GetMethod() {
 			reply, err = method.Handler(c.impl, context.TODO(), dec, nil)
 			break
 		}
@@ -60,6 +61,9 @@ func (c *GreeterLibrary) onServer(request *call.CRPCProtocol) (*call.CRPCProtoco
 
 	if err != nil {
 		return nil, err
+	}
+	if reply == nil {
+		return nil, errors.New("no reply")
 	}
 
 	replyData, err := proto.Marshal(reply.(proto.Message))
@@ -81,11 +85,6 @@ func (c *GreeterLibrary) onServer(request *call.CRPCProtocol) (*call.CRPCProtoco
 
 func (c *GreeterLibrary) NewCC() grpc.ClientConnInterface {
 	return c
-}
-
-func (c *GreeterLibrary) RegisterServer(srv GreeterServer) {
-	c.impl = srv
-	RegisterGreeterServer(c, srv)
 }
 
 func (c *GreeterLibrary) call(method string, args interface{}, reply proto.Message) error {
@@ -122,5 +121,6 @@ func (c *GreeterLibrary) NewStream(ctx context.Context, desc *grpc.StreamDesc, m
 }
 
 func (c *GreeterLibrary) RegisterService(desc *grpc.ServiceDesc, impl interface{}) {
+	c.impl = impl.(GreeterServer)
 	c.desc = desc
 }

@@ -49,13 +49,14 @@ func (c *{{.ServiceName}}Library) onServer(request *call.CRPCProtocol) (*call.CR
         err   error
         reply interface{}
         dec   = func(v interface{}) error {
-            return proto.Unmarshal(request.GetResponse(), v.(proto.Message))
+            return proto.Unmarshal(request.GetRequest(), v.(proto.Message))
         }
     )
 
     // 匹配服务函数
     for _, method := range c.desc.Methods {
-        if method.MethodName == request.GetMethod() {
+        methodName := fmt.Sprintf("/%s/%s", c.desc.ServiceName, method.MethodName)
+        if methodName == request.GetMethod() {
             reply, err = method.Handler(c.impl, context.TODO(), dec, nil)
             break
         }
@@ -63,6 +64,9 @@ func (c *{{.ServiceName}}Library) onServer(request *call.CRPCProtocol) (*call.CR
 
     if err != nil {
         return nil, err
+    }
+    if reply == nil {
+        return nil, errors.New("no reply")
     }
 
     replyData, err := proto.Marshal(reply.(proto.Message))
@@ -84,11 +88,6 @@ func (c *{{.ServiceName}}Library) onServer(request *call.CRPCProtocol) (*call.CR
 
 func (c *{{.ServiceName}}Library) NewCC() grpc.ClientConnInterface {
     return c
-}
-
-func (c *{{.ServiceName}}Library) RegisterServer(srv {{.ServiceName}}Server) {
-    c.impl = srv
-    Register{{.ServiceName}}Server(c, srv)
 }
 
 func (c *{{.ServiceName}}Library) call(method string, args interface{}, reply proto.Message) error {
@@ -125,6 +124,7 @@ func (c *{{.ServiceName}}Library) NewStream(ctx context.Context, desc *grpc.Stre
 }
 
 func (c *{{.ServiceName}}Library) RegisterService(desc *grpc.ServiceDesc, impl interface{}) {
+    c.impl = impl.(GreeterServer)
     c.desc = desc
 }
 

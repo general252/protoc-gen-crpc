@@ -852,6 +852,7 @@ class CRPCProtocol_Inner final :
   enum : int {
     kMethodFieldNumber = 1,
     kCallbackFieldNumber = 2,
+    kCallbackArgsFieldNumber = 3,
   };
   // string method = 1;
   void clear_method();
@@ -876,6 +877,15 @@ class CRPCProtocol_Inner final :
   void _internal_set_callback(uint64_t value);
   public:
 
+  // uint64 callbackArgs = 3;
+  void clear_callbackargs();
+  uint64_t callbackargs() const;
+  void set_callbackargs(uint64_t value);
+  private:
+  uint64_t _internal_callbackargs() const;
+  void _internal_set_callbackargs(uint64_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:helloworld.CRPCProtocol.Inner)
  private:
   class _Internal;
@@ -885,6 +895,7 @@ class CRPCProtocol_Inner final :
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr method_;
   uint64_t callback_;
+  uint64_t callbackargs_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_helloworld_2eproto;
 };
@@ -1485,6 +1496,26 @@ inline void CRPCProtocol_Inner::_internal_set_callback(uint64_t value) {
 inline void CRPCProtocol_Inner::set_callback(uint64_t value) {
   _internal_set_callback(value);
   // @@protoc_insertion_point(field_set:helloworld.CRPCProtocol.Inner.callback)
+}
+
+// uint64 callbackArgs = 3;
+inline void CRPCProtocol_Inner::clear_callbackargs() {
+  callbackargs_ = uint64_t{0u};
+}
+inline uint64_t CRPCProtocol_Inner::_internal_callbackargs() const {
+  return callbackargs_;
+}
+inline uint64_t CRPCProtocol_Inner::callbackargs() const {
+  // @@protoc_insertion_point(field_get:helloworld.CRPCProtocol.Inner.callbackArgs)
+  return _internal_callbackargs();
+}
+inline void CRPCProtocol_Inner::_internal_set_callbackargs(uint64_t value) {
+  
+  callbackargs_ = value;
+}
+inline void CRPCProtocol_Inner::set_callbackargs(uint64_t value) {
+  _internal_set_callbackargs(value);
+  // @@protoc_insertion_point(field_set:helloworld.CRPCProtocol.Inner.callbackArgs)
 }
 
 // -------------------------------------------------------------------

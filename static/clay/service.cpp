@@ -3,21 +3,21 @@
 
 {{range .Services}}
 
-static {{.ServiceName}}Service* ins{{.ServiceName}} = NULL;
-{{.ServiceName}}Service* Get{{.ServiceName}}Service() {
+static {{.ServiceName}}ServiceImpl* ins{{.ServiceName}} = NULL;
+{{.ServiceName}}ServiceImpl* Get{{.ServiceName}}ServiceImpl() {
     if (NULL == ins{{.ServiceName}}) {
-        static {{.ServiceName}}Service mIns{{.ServiceName}};
+        static {{.ServiceName}}ServiceImpl mIns{{.ServiceName}};
         return &mIns{{.ServiceName}};
     }
     return ins{{.ServiceName}};
 }
 
-void Set{{.ServiceName}}Service({{.ServiceName}}Service* ins) {
+void Set{{.ServiceName}}ServiceImpl({{.ServiceName}}ServiceImpl* ins) {
     ins{{.ServiceName}} = ins;
 }
 
 
-void {{.ServiceName}}Service::OnInvoke(const {{.PacketName}}::CRPCProtocol& request, {{.PacketName}}::CRPCProtocol& response)
+void {{.ServiceName}}ServiceImpl::OnInvoke(const {{.PacketName}}::CRPCProtocol& request, {{.PacketName}}::CRPCProtocol& response)
 {
 {{range .Methods}}
     if (request.method() == "/{{.PacketName}}.{{.ServiceName}}/{{.MethodName}}") {
@@ -45,7 +45,7 @@ void {{.ServiceName}}Service::OnInvoke(const {{.PacketName}}::CRPCProtocol& requ
 
 {{range .Methods}}
 
-void {{.ServiceName}}Service::{{.MethodName}}(const {{.PacketName}}::{{.Input}}& request, {{.PacketName}}::{{.Output}}& response) {
+void {{.ServiceName}}ServiceImpl::{{.MethodName}}(const {{.PacketName}}::{{.Input}}& request, {{.PacketName}}::{{.Output}}& response) {
     printf("{{.ServiceName}}Service::{{.MethodName}} un implemented\n");
 }
 
