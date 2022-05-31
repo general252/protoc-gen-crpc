@@ -1,8 +1,20 @@
+#pragma once
+
+// g++ -fPIC -shared *.cpp *.cc -o clay.so -lprotobuf -lpthread -std=c++11
+
+#ifdef _MSC_VER
+
 #ifdef {{.ExportHeader}}_EXPORTS
 #define {{.ExportHeader}}_API __declspec(dllexport)
 #else
 #define {{.ExportHeader}}_API __declspec(dllimport)
 #endif
+
+#else
+
+#define ALG_FACE_API
+
+#endif // _MSC_VER
 
 #include <stdint.h>
 #include <string.h>

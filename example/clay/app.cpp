@@ -1,5 +1,8 @@
 
+
+#ifdef _MSC_VER
 #define HELLOWORLD_EXPORTS
+#endif // _MSC_VER
 
 #include "app.h"
 #include "helloworld.pb.h"
@@ -124,6 +127,7 @@ HELLOWORLD_API int crpc_call(char* data, int32_t length)
         }
 
         cpp_on_invoke(request, response);
+        return 0;
     }
     else
     {
