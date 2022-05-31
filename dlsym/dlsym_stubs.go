@@ -41,15 +41,15 @@ import "C"
 
 import (
 	"errors"
-	"reflect"
 	"unsafe"
 )
 
 func openSym(name string) (*DlSym, error) {
 	var cErr *C.char
-	var cPath = (*C.char)(unsafe.Pointer((*reflect.StringHeader)(unsafe.Pointer(&name)).Data))
+	in := C.CString(name)
+	defer C.free(unsafe.Pointer(in))
 
-	h := C.dlsymOpen((*C.char)(unsafe.Pointer(&cPath[0])), &cErr)
+	h := C.dlsymOpen(in, &cErr)
 	if h == 0 {
 		return nil, errors.New(`dlsym.Open("` + name + `"): ` + C.GoString(cErr))
 	}
@@ -63,7 +63,8 @@ func closeSym(p *DlSym) {
 
 func lookupSym(p *DlSym, symName string) (uintptr, error) {
 	var cErr *C.char
-	var in = (*C.char)(unsafe.Pointer((*reflect.StringHeader)(unsafe.Pointer(&symName)).Data))
+	in := C.CString(symName)
+	defer C.free(unsafe.Pointer(in))
 
 	v := C.dlsymLookup(C.uintptr_t(p.h), in, &cErr)
 	if v == nil {

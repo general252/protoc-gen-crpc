@@ -74,13 +74,9 @@ func closeSym(p *DlSym) {
 }
 
 func lookupSym(p *DlSym, symName string) (uintptr, error) {
-	var (
-		cErr *C.char
-		name = make([]byte, C.PATH_MAX+1)
-	)
-	copy(name, symName)
-
-	in := (*C.char)(unsafe.Pointer(&name[0]))
+	var cErr *C.char
+	in := C.CString(symName)
+	defer C.free(unsafe.Pointer(in))
 
 	v := C.dlsymLookup(C.uintptr_t(p.h), in, &cErr)
 	if v == 0 {
