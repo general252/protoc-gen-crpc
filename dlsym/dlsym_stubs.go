@@ -67,7 +67,7 @@ func lookupSym(p *DlSym, symName string) (uintptr, error) {
 	defer C.free(unsafe.Pointer(in))
 
 	v := C.dlsymLookup(C.uintptr_t(p.h), in, &cErr)
-	if v == nil {
+	if v == 0 {
 		return uintptr(0), errors.New(`lookup("` + symName + `"): ` + C.GoString(cErr))
 	}
 
