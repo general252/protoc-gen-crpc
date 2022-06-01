@@ -1,18 +1,3 @@
-package {{.PacketName}}
-
-import (
-    "context"
-    "errors"
-	"fmt"
-
-    "google.golang.org/grpc"
-    "google.golang.org/grpc/codes"
-    "google.golang.org/grpc/status"
-    "google.golang.org/protobuf/proto"
-
-
-    "github.com/general252/protoc-gen-crpc/call"
-)
 
 {{range .Services}}
 
@@ -42,7 +27,7 @@ func (c *{{.ServiceName}}Library) Load() error {
 
 func (c *{{.ServiceName}}Library) onServer(request *call.CRPCProtocol) (*call.CRPCProtocol, error) {
     if c.desc == nil {
-        return nil, errors.New("server not init")
+        return nil, fmt.Errorf("server not init")
     }
 
     var (
@@ -66,7 +51,7 @@ func (c *{{.ServiceName}}Library) onServer(request *call.CRPCProtocol) (*call.CR
         return nil, err
     }
     if reply == nil {
-        return nil, errors.New("no reply")
+        return nil, fmt.Errorf("no reply")
     }
 
     replyData, err := proto.Marshal(reply.(proto.Message))
@@ -105,7 +90,7 @@ func (c *{{.ServiceName}}Library) call(method string, args interface{}, reply pr
     }
 
     if resp.GetCode() != call.CRPCProtocol_OK {
-        return errors.New(fmt.Sprintf("Call fail. [%v] %v, %v", method, resp.GetCode(), resp.GetMsg()))
+        return fmt.Errorf("Call fail. [%v] %v, %v", method, resp.GetCode(), resp.GetMsg())
     }
 
     if err = proto.Unmarshal(resp.GetResponse(), reply); err != nil {

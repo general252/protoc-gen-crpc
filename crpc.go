@@ -30,29 +30,38 @@ import (
 )
 
 const (
-	contextPackage = protogen.GoImportPath("context")
-	grpcPackage    = protogen.GoImportPath("google.golang.org/grpc")
-	codesPackage   = protogen.GoImportPath("google.golang.org/grpc/codes")
-	statusPackage  = protogen.GoImportPath("google.golang.org/grpc/status")
+	callPackage  = protogen.GoImportPath("github.com/general252/protoc-gen-crpc/call")
+	protoPackage = protogen.GoImportPath("google.golang.org/protobuf/proto")
+	fmtPackage   = protogen.GoImportPath("fmt")
 )
 
 // generateFile generates a _grpc.pb.go file containing gRPC service definitions.
-func generateFile(gen *protogen.Plugin, file *protogen.File) *protogen.GeneratedFile {
+func generateFileX(gen *protogen.Plugin, file *protogen.File, g *protogen.GeneratedFile) {
 	if len(file.Services) == 0 {
-		return nil
+		return
 	}
 
-	var writeTpl = func(filename string, text string) {
-		g := gen.NewGeneratedFile(filename, file.GoImportPath)
+	g.P()
+	g.P()
+	g.P("// -----------------------------------------------------------------------------------------------------")
+	g.P()
+	g.P("var _ = ", callPackage.Ident("CRPCProtocol{}"))
+	g.P("var _ = ", protoPackage.Ident("Marshal"))
+	g.P("var _ = ", fmtPackage.Ident("Println"))
 
-		generateFileContent(gen, file, g, text)
+	var writeTpl = func(filename string, text string, g *protogen.GeneratedFile) {
+		if g == nil {
+			g = gen.NewGeneratedFile(filename, file.GoImportPath)
+		}
+
+		generateFileContentX(gen, file, g, text)
 	}
 
-	writeTpl(file.GeneratedFilenamePrefix+".go", static.GetGoTpl())
-	writeTpl("../clay/"+file.GeneratedFilenamePrefix+"_export.h", static.GetExportH())
-	writeTpl("../clay/"+file.GeneratedFilenamePrefix+"_export.cpp", static.GetExportCpp())
-	writeTpl("../clay/"+file.GeneratedFilenamePrefix+"_service.h", static.GetServiceH())
-	writeTpl("../clay/"+file.GeneratedFilenamePrefix+"_service.cpp", static.GetServiceCpp())
+	writeTpl(file.GeneratedFilenamePrefix+".go", static.GetGoTpl(), g)
+	writeTpl("../clay/"+file.GeneratedFilenamePrefix+"_export.h", static.GetExportH(), nil)
+	writeTpl("../clay/"+file.GeneratedFilenamePrefix+"_export.cpp", static.GetExportCpp(), nil)
+	writeTpl("../clay/"+file.GeneratedFilenamePrefix+"_service.h", static.GetServiceH(), nil)
+	writeTpl("../clay/"+file.GeneratedFilenamePrefix+"_service.cpp", static.GetServiceCpp(), nil)
 
 	var haveFile = false
 	_ = filepath.WalkDir(".", func(path string, d fs.DirEntry, err error) error {
@@ -71,14 +80,12 @@ func generateFile(gen *protogen.Plugin, file *protogen.File) *protogen.Generated
 	})
 	if haveFile {
 	} else {
-		writeTpl("../clay/"+"my_app.cpp", static.GetMyAppCPP())
+		writeTpl("../clay/"+"my_app.cpp", static.GetMyAppCPP(), nil)
 	}
-
-	return nil
 }
 
 // generateFileContent generates the gRPC service definitions, excluding the package statement.
-func generateFileContent(gen *protogen.Plugin, file *protogen.File, g *protogen.GeneratedFile, text string) {
+func generateFileContentX(gen *protogen.Plugin, file *protogen.File, g *protogen.GeneratedFile, text string) {
 	if len(file.Services) == 0 {
 		return
 	}
