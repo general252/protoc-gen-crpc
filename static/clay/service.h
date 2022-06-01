@@ -37,11 +37,11 @@ public:
     fn_cpp_invoke invoke;
 
 private:
-    {{.PacketName}}::CRPCProtocol_ErrorCode m_invoke(const std::string& method, const google::protobuf::Message& request, google::protobuf::Message& response);
+    {{.PacketName}}::CRPCProtocol_ErrorCode m_invoke(const std::string& method, const google::protobuf::Message& request, google::protobuf::Message& response, {{.PacketName}}::CRPCProtocol* out);
 
 public:
   {{range .Methods}}
-    {{.PacketName}}::CRPCProtocol_ErrorCode {{.MethodName}}(const {{.PacketName}}::{{.Input}}& request, {{.PacketName}}::{{.Output}}& response);
+    {{.PacketName}}::CRPCProtocol_ErrorCode {{.MethodName}}(const {{.PacketName}}::{{.Input}}& request, {{.PacketName}}::{{.Output}}& response, {{.PacketName}}::CRPCProtocol* out = NULL);
   {{end}}
 };
 

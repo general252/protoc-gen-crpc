@@ -108,7 +108,7 @@ void SetGreeterClinetInvoke(fn_cpp_invoke invoke) {
 }
 
 
-helloworld::CRPCProtocol_ErrorCode GreeterClient::m_invoke(const std::string& method, const google::protobuf::Message& request, google::protobuf::Message& response) {
+helloworld::CRPCProtocol_ErrorCode GreeterClient::m_invoke(const std::string& method, const google::protobuf::Message& request, google::protobuf::Message& response, helloworld::CRPCProtocol* out) {
     if (!this->invoke) {
         return helloworld::CRPCProtocol_ErrorCode_NotInit;
     }
@@ -117,27 +117,37 @@ helloworld::CRPCProtocol_ErrorCode GreeterClient::m_invoke(const std::string& me
     req.set_method(method);
     req.set_request(request.SerializeAsString());
 
-    helloworld::CRPCProtocol_ErrorCode result = this->invoke(req, res);
+    if (!out) {
+        out = &res;
+    }
+
+    helloworld::CRPCProtocol_ErrorCode result = this->invoke(req, *out);
     if (result != helloworld::CRPCProtocol_ErrorCode_OK) {
         return result;
     }
 
-    if (!response.ParseFromString(res.response())) {
+    if (out->code() != helloworld::CRPCProtocol_ErrorCode_OK) {
+        return out->code();
+    }
+
+    if (!response.ParseFromString(out->response())) {
         printf("parse fail %s\n", method.data());
         return helloworld::CRPCProtocol_ErrorCode_Fail;
     }
     else {
         // printf("[%s] debug: %s\n", method.data(), response.DebugString().data());
     }
+
+    return helloworld::CRPCProtocol_ErrorCode_OK;
 }
 
 
-helloworld::CRPCProtocol_ErrorCode GreeterClient::SayHello(const helloworld::HelloRequest& request, helloworld::HelloReply& response) {
-    return this->m_invoke("/helloworld.Greeter/SayHello", request, response);
+helloworld::CRPCProtocol_ErrorCode GreeterClient::SayHello(const helloworld::HelloRequest& request, helloworld::HelloReply& response, helloworld::CRPCProtocol* out) {
+    return this->m_invoke("/helloworld.Greeter/SayHello", request, response, out);
 }
 
-helloworld::CRPCProtocol_ErrorCode GreeterClient::Hello(const helloworld::A& request, helloworld::B& response) {
-    return this->m_invoke("/helloworld.Greeter/Hello", request, response);
+helloworld::CRPCProtocol_ErrorCode GreeterClient::Hello(const helloworld::A& request, helloworld::B& response, helloworld::CRPCProtocol* out) {
+    return this->m_invoke("/helloworld.Greeter/Hello", request, response, out);
 }
 
 

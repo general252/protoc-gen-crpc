@@ -40,13 +40,13 @@ public:
     fn_cpp_invoke invoke;
 
 private:
-    helloworld::CRPCProtocol_ErrorCode m_invoke(const std::string& method, const google::protobuf::Message& request, google::protobuf::Message& response);
+    helloworld::CRPCProtocol_ErrorCode m_invoke(const std::string& method, const google::protobuf::Message& request, google::protobuf::Message& response, helloworld::CRPCProtocol* out);
 
 public:
   
-    helloworld::CRPCProtocol_ErrorCode SayHello(const helloworld::HelloRequest& request, helloworld::HelloReply& response);
+    helloworld::CRPCProtocol_ErrorCode SayHello(const helloworld::HelloRequest& request, helloworld::HelloReply& response, helloworld::CRPCProtocol* out = NULL);
   
-    helloworld::CRPCProtocol_ErrorCode Hello(const helloworld::A& request, helloworld::B& response);
+    helloworld::CRPCProtocol_ErrorCode Hello(const helloworld::A& request, helloworld::B& response, helloworld::CRPCProtocol* out = NULL);
   
 };
 

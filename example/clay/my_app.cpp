@@ -18,15 +18,25 @@ class myGreeterServiceImpl : public GreeterServiceImpl
 {
 public:
 
-  
-    virtual helloworld::CRPCProtocol_ErrorCode SayHello(const helloworld::HelloRequest& request,  helloworld::HelloReply& response) {
+
+    virtual helloworld::CRPCProtocol_ErrorCode SayHello(const helloworld::HelloRequest& request, helloworld::HelloReply& response) {
+        response.set_message("this is msg");
+
+        helloworld::A a;
+        helloworld::B b;
+        helloworld::CRPCProtocol out;
+        a.set_a("this is a");
+
+        auto r = GetGreeterClinet()->Hello(a, b, &out);
+        printf("r: %d, [%s] %s\n", r, out.msg().data(), b.b().data());
+
         return helloworld::CRPCProtocol_ErrorCode_OK;;
     }
-  
-    virtual helloworld::CRPCProtocol_ErrorCode Hello(const helloworld::A& request,  helloworld::B& response) {
+
+    virtual helloworld::CRPCProtocol_ErrorCode Hello(const helloworld::A& request, helloworld::B& response) {
         return helloworld::CRPCProtocol_ErrorCode_OK;;
     }
-  
+
 
 };
 
@@ -38,10 +48,10 @@ class InitApp
 {
 public:
     InitApp() {
-    
+
         static myGreeterServiceImpl insGreeterServiceImpl;
         SetGreeterServiceImpl(&insGreeterServiceImpl);
-    
+
     }
 }_init_app;
 

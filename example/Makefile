@@ -1,6 +1,9 @@
 
-app:
-	go build -o ../bin/example.exe main.go
+default:
+	go build -o ../bin/example.exe example.go
+
+run:
+	../bin/example.exe
 
 build:
 	protoc --go_out=./golay --go_opt=paths=source_relative \

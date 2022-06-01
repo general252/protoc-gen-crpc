@@ -46,7 +46,7 @@ func FnOnEventGo(data *C.char, length C.int32_t) C.int32_t {
 	var resp CRPCProtocol
 	if err := proto.Unmarshal(payload, &resp); err != nil {
 		log.Println(err)
-		return C.int32_t(0)
+		return C.int32_t(CRPCProtocol_InvalidArgument)
 	}
 
 	var h = resp.GetFunHandle()
@@ -67,7 +67,7 @@ func FnOnEventGo(data *C.char, length C.int32_t) C.int32_t {
 		log.Printf("cgo handle value not is function. %v", h)
 	}
 
-	return C.int32_t(0)
+	return C.int32_t(CRPCProtocol_OK)
 }
 
 //export FnServerGo
@@ -77,7 +77,7 @@ func FnServerGo(data *C.char, length C.int32_t) C.int32_t {
 	var request CRPCProtocol
 	if err := proto.Unmarshal(payload, &request); err != nil {
 		log.Println(err)
-		return C.int32_t(0)
+		return C.int32_t(CRPCProtocol_InvalidArgument)
 	}
 
 	libraryMap.Range(func(key, value interface{}) bool {
@@ -105,7 +105,7 @@ func FnServerGo(data *C.char, length C.int32_t) C.int32_t {
 		return true
 	})
 
-	return C.int32_t(0)
+	return C.int32_t(CRPCProtocol_OK)
 }
 
 var (
@@ -146,7 +146,7 @@ func (c *Library) OnCall(res *CRPCProtocol) error {
 	inLen := C.int32_t(len(data))
 
 	var r = C.call_method(C.uintptr_t(c.fnCall), in, inLen)
-	if r != CRPCProtocol_OK {
+	if CRPCProtocol_ErrorCode(r) != CRPCProtocol_OK {
 		return errors.New(fmt.Sprintf("error result: %v", CRPCProtocol_ErrorCode(r)))
 	}
 
@@ -171,7 +171,7 @@ func (c *Library) Call(req *CRPCProtocol) (*CRPCProtocol, error) {
 	inLen := C.int32_t(len(data))
 
 	var r = C.call_method(C.uintptr_t(c.fnCall), in, inLen)
-	if r != CRPCProtocol_OK {
+	if CRPCProtocol_ErrorCode(r) != CRPCProtocol_OK {
 		return nil, errors.New(fmt.Sprintf("error result: %v", CRPCProtocol_ErrorCode(r)))
 	}
 

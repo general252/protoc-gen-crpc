@@ -2,9 +2,9 @@ package main
 
 import (
 	"context"
-	"log"
-
 	helloworld "example/golay"
+	"log"
+	"os"
 )
 
 func init() {
@@ -26,7 +26,7 @@ func (tis *GreeterServer) Hello(ctx context.Context, req *helloworld.A) (*hellow
 	log.Printf("recv %v", req.GetA())
 	return &helloworld.B{
 		B: "nb+" + req.GetA(),
-	}, nil
+	}, os.ErrExist
 }
 
 func main() {

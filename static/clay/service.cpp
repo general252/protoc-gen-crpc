@@ -80,7 +80,7 @@ void Set{{.ServiceName}}ClinetInvoke(fn_cpp_invoke invoke) {
 }
 
 
-{{.PacketName}}::CRPCProtocol_ErrorCode {{.ServiceName}}Client::m_invoke(const std::string& method, const google::protobuf::Message& request, google::protobuf::Message& response) {
+{{.PacketName}}::CRPCProtocol_ErrorCode {{.ServiceName}}Client::m_invoke(const std::string& method, const google::protobuf::Message& request, google::protobuf::Message& response, {{.PacketName}}::CRPCProtocol* out) {
     if (!this->invoke) {
         return {{.PacketName}}::CRPCProtocol_ErrorCode_NotInit;
     }
@@ -89,23 +89,33 @@ void Set{{.ServiceName}}ClinetInvoke(fn_cpp_invoke invoke) {
     req.set_method(method);
     req.set_request(request.SerializeAsString());
 
-    {{.PacketName}}::CRPCProtocol_ErrorCode result = this->invoke(req, res);
+    if (!out) {
+        out = &res;
+    }
+
+    {{.PacketName}}::CRPCProtocol_ErrorCode result = this->invoke(req, *out);
     if (result != {{.PacketName}}::CRPCProtocol_ErrorCode_OK) {
         return result;
     }
 
-    if (!response.ParseFromString(res.response())) {
+    if (out->code() != {{.PacketName}}::CRPCProtocol_ErrorCode_OK) {
+        return out->code();
+    }
+
+    if (!response.ParseFromString(out->response())) {
         printf("parse fail %s\n", method.data());
         return {{.PacketName}}::CRPCProtocol_ErrorCode_Fail;
     }
     else {
         // printf("[%s] debug: %s\n", method.data(), response.DebugString().data());
     }
+
+    return {{.PacketName}}::CRPCProtocol_ErrorCode_OK;
 }
 
 {{range .Methods}}
-{{.PacketName}}::CRPCProtocol_ErrorCode {{.ServiceName}}Client::{{.MethodName}}(const {{.PacketName}}::{{.Input}}& request, {{.PacketName}}::{{.Output}}& response) {
-    return this->m_invoke("/{{.PacketName}}.{{.ServiceName}}/{{.MethodName}}", request, response);
+{{.PacketName}}::CRPCProtocol_ErrorCode {{.ServiceName}}Client::{{.MethodName}}(const {{.PacketName}}::{{.Input}}& request, {{.PacketName}}::{{.Output}}& response, {{.PacketName}}::CRPCProtocol* out) {
+    return this->m_invoke("/{{.PacketName}}.{{.ServiceName}}/{{.MethodName}}", request, response, out);
 }
 {{end}}
 
