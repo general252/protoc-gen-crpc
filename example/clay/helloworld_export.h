@@ -1,18 +1,20 @@
-#pragma once
+
+#ifndef __HELLOWORLD_EXPORT_H_
+#define __HELLOWORLD_EXPORT_H_
 
 // g++ -fPIC -shared *.cpp *.cc -o clay.so -lprotobuf -lpthread -std=c++11
 
 #ifdef _MSC_VER
 
-#ifdef {{.ExportHeader}}_EXPORTS
-#define {{.ExportHeader}}_API __declspec(dllexport)
+#ifdef HELLOWORLD_EXPORTS
+#define HELLOWORLD_API __declspec(dllexport)
 #else
-#define {{.ExportHeader}}_API __declspec(dllimport)
+#define HELLOWORLD_API __declspec(dllimport)
 #endif
 
 #else
 
-#define ALG_FACE_API
+#define HELLOWORLD_API
 
 #endif // _MSC_VER
 
@@ -26,9 +28,14 @@ extern "C" {
 #endif // __cplusplus
 
 
-{{.ExportHeader}}_API int crpc_call(char* data, int32_t length);
+HELLOWORLD_API int crpc_call(char* data, int32_t length);
 
 
 #ifdef __cplusplus
 };
 #endif // __cplusplus
+
+
+#endif // __HELLOWORLD_EXPORT_H_
+
+

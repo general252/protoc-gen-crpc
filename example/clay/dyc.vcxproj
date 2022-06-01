@@ -11,16 +11,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="app.cpp" />
-    <ClCompile Include="helloworld_client.cpp" />
-    <ClCompile Include="my_app.cpp" />
     <ClCompile Include="helloworld.pb.cc" />
+    <ClCompile Include="helloworld_export.cpp" />
     <ClCompile Include="helloworld_service.cpp" />
+    <ClCompile Include="my_app.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="app.h" />
     <ClInclude Include="helloworld.pb.h" />
-    <ClInclude Include="helloworld_client.h" />
+    <ClInclude Include="helloworld_export.h" />
     <ClInclude Include="helloworld_service.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

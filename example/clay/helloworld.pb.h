@@ -88,13 +88,16 @@ enum CRPCProtocol_ErrorCode : int {
   CRPCProtocol_ErrorCode_Unknown = 0,
   CRPCProtocol_ErrorCode_OK = 1,
   CRPCProtocol_ErrorCode_Fail = 2,
-  CRPCProtocol_ErrorCode_Unimplemented = 3,
+  CRPCProtocol_ErrorCode_NotInit = 3,
+  CRPCProtocol_ErrorCode_NoResponse = 4,
+  CRPCProtocol_ErrorCode_Unimplemented = 5,
+  CRPCProtocol_ErrorCode_InvalidArgument = 6,
   CRPCProtocol_ErrorCode_CRPCProtocol_ErrorCode_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   CRPCProtocol_ErrorCode_CRPCProtocol_ErrorCode_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
 bool CRPCProtocol_ErrorCode_IsValid(int value);
 constexpr CRPCProtocol_ErrorCode CRPCProtocol_ErrorCode_ErrorCode_MIN = CRPCProtocol_ErrorCode_Unknown;
-constexpr CRPCProtocol_ErrorCode CRPCProtocol_ErrorCode_ErrorCode_MAX = CRPCProtocol_ErrorCode_Unimplemented;
+constexpr CRPCProtocol_ErrorCode CRPCProtocol_ErrorCode_ErrorCode_MAX = CRPCProtocol_ErrorCode_InvalidArgument;
 constexpr int CRPCProtocol_ErrorCode_ErrorCode_ARRAYSIZE = CRPCProtocol_ErrorCode_ErrorCode_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* CRPCProtocol_ErrorCode_descriptor();
@@ -1029,8 +1032,14 @@ class CRPCProtocol final :
     CRPCProtocol_ErrorCode_OK;
   static constexpr ErrorCode Fail =
     CRPCProtocol_ErrorCode_Fail;
+  static constexpr ErrorCode NotInit =
+    CRPCProtocol_ErrorCode_NotInit;
+  static constexpr ErrorCode NoResponse =
+    CRPCProtocol_ErrorCode_NoResponse;
   static constexpr ErrorCode Unimplemented =
     CRPCProtocol_ErrorCode_Unimplemented;
+  static constexpr ErrorCode InvalidArgument =
+    CRPCProtocol_ErrorCode_InvalidArgument;
   static inline bool ErrorCode_IsValid(int value) {
     return CRPCProtocol_ErrorCode_IsValid(value);
   }

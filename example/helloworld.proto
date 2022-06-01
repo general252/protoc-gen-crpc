@@ -42,7 +42,10 @@ message CRPCProtocol {
     Unknown = 0;
     OK = 1;
     Fail = 2;
-    Unimplemented = 3;
+    NotInit = 3;
+    NoResponse = 4;
+    Unimplemented = 5;
+    InvalidArgument = 6;
   }
 
   string method = 1; // 方法

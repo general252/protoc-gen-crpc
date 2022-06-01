@@ -24,7 +24,6 @@ import (
 	"google.golang.org/protobuf/compiler/protogen"
 	"io/fs"
 	"log"
-	"os"
 	"path/filepath"
 	"strings"
 	"text/template"
@@ -50,12 +49,10 @@ func generateFile(gen *protogen.Plugin, file *protogen.File) *protogen.Generated
 	}
 
 	writeTpl(file.GeneratedFilenamePrefix+".go", static.GetGoTpl())
-	writeTpl("../clay/"+"app.h", static.GetAppH())
-	writeTpl("../clay/"+"app.cpp", static.GetAppCpp())
+	writeTpl("../clay/"+file.GeneratedFilenamePrefix+"_export.h", static.GetExportH())
+	writeTpl("../clay/"+file.GeneratedFilenamePrefix+"_export.cpp", static.GetExportCpp())
 	writeTpl("../clay/"+file.GeneratedFilenamePrefix+"_service.h", static.GetServiceH())
 	writeTpl("../clay/"+file.GeneratedFilenamePrefix+"_service.cpp", static.GetServiceCpp())
-	writeTpl("../clay/"+file.GeneratedFilenamePrefix+"_client.h", static.GetClientH())
-	writeTpl("../clay/"+file.GeneratedFilenamePrefix+"_client.cpp", static.GetClientCpp())
 
 	var haveFile = false
 	_ = filepath.WalkDir(".", func(path string, d fs.DirEntry, err error) error {
@@ -168,24 +165,5 @@ func generateFileContent(gen *protogen.Plugin, file *protogen.File, g *protogen.
 		g.P()
 		g.P(buf.String())
 		g.P()
-	}
-
-	if false {
-		var writeTpl = func(name string, text string) {
-			filename := file.GeneratedFilenamePrefix + name
-			buf, err := getTpl(name, static.GetAppH())
-			if err != nil {
-				log.Println(err)
-				return
-			}
-			if err = os.WriteFile(filename, buf.Bytes(), os.ModePerm); err != nil {
-				log.Println(err)
-			}
-		}
-
-		writeTpl("_app.h", static.GetAppH())
-		writeTpl("_app.cpp", static.GetAppCpp())
-		writeTpl("_service.h", static.GetServiceH())
-		writeTpl("_service.cpp", static.GetServiceCpp())
 	}
 }

@@ -179,24 +179,26 @@ const char descriptor_table_protodef_helloworld_2eproto[] PROTOBUF_SECTION_VARIA
   "\n\020helloworld.proto\022\nhelloworld\")\n\014HelloR"
   "equest\022\014\n\004name\030\001 \001(\t\022\013\n\003age\030\002 \001(\005\"\035\n\nHel"
   "loReply\022\017\n\007message\030\001 \001(\t\"\016\n\001A\022\t\n\001a\030\001 \001(\t"
-  "\"\016\n\001B\022\t\n\001b\030\001 \001(\t\"\302\002\n\014CRPCProtocol\022\016\n\006met"
+  "\"\016\n\001B\022\t\n\001b\030\001 \001(\t\"\364\002\n\014CRPCProtocol\022\016\n\006met"
   "hod\030\001 \001(\t\022\021\n\tfunHandle\030\002 \001(\004\022\017\n\007request\030"
   "\003 \001(\014\022\020\n\010response\030\004 \001(\014\0220\n\004code\030\n \001(\0162\"."
   "helloworld.CRPCProtocol.ErrorCode\022\013\n\003msg"
   "\030\013 \001(\t\022-\n\005inner\030d \001(\0132\036.helloworld.CRPCP"
   "rotocol.Inner\032\?\n\005Inner\022\016\n\006method\030\001 \001(\t\022\020"
-  "\n\010callback\030\002 \001(\004\022\024\n\014callbackArgs\030\003 \001(\004\"="
+  "\n\010callback\030\002 \001(\004\022\024\n\014callbackArgs\030\003 \001(\004\"o"
   "\n\tErrorCode\022\013\n\007Unknown\020\000\022\006\n\002OK\020\001\022\010\n\004Fail"
-  "\020\002\022\021\n\rUnimplemented\020\0032r\n\007Greeter\022>\n\010SayH"
-  "ello\022\030.helloworld.HelloRequest\032\026.hellowo"
-  "rld.HelloReply\"\000\022\'\n\005Hello\022\r.helloworld.A"
-  "\032\r.helloworld.B\"\000B]\n\026io.grpc.examples.go"
-  "layB\nhelloworldP\001Z5google.golang.org/grp"
-  "c/examples/helloworld/helloworldb\006proto3"
+  "\020\002\022\013\n\007NotInit\020\003\022\016\n\nNoResponse\020\004\022\021\n\rUnimp"
+  "lemented\020\005\022\023\n\017InvalidArgument\020\0062r\n\007Greet"
+  "er\022>\n\010SayHello\022\030.helloworld.HelloRequest"
+  "\032\026.helloworld.HelloReply\"\000\022\'\n\005Hello\022\r.he"
+  "lloworld.A\032\r.helloworld.B\"\000B]\n\026io.grpc.e"
+  "xamples.golayB\nhelloworldP\001Z5google.gola"
+  "ng.org/grpc/examples/helloworld/hellowor"
+  "ldb\006proto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_helloworld_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_helloworld_2eproto = {
-  false, false, 680, descriptor_table_protodef_helloworld_2eproto, "helloworld.proto", 
+  false, false, 730, descriptor_table_protodef_helloworld_2eproto, "helloworld.proto", 
   &descriptor_table_helloworld_2eproto_once, nullptr, 0, 6,
   schemas, file_default_instances, TableStruct_helloworld_2eproto::offsets,
   file_level_metadata_helloworld_2eproto, file_level_enum_descriptors_helloworld_2eproto, file_level_service_descriptors_helloworld_2eproto,
@@ -218,6 +220,9 @@ bool CRPCProtocol_ErrorCode_IsValid(int value) {
     case 1:
     case 2:
     case 3:
+    case 4:
+    case 5:
+    case 6:
       return true;
     default:
       return false;
@@ -228,7 +233,10 @@ bool CRPCProtocol_ErrorCode_IsValid(int value) {
 constexpr CRPCProtocol_ErrorCode CRPCProtocol::Unknown;
 constexpr CRPCProtocol_ErrorCode CRPCProtocol::OK;
 constexpr CRPCProtocol_ErrorCode CRPCProtocol::Fail;
+constexpr CRPCProtocol_ErrorCode CRPCProtocol::NotInit;
+constexpr CRPCProtocol_ErrorCode CRPCProtocol::NoResponse;
 constexpr CRPCProtocol_ErrorCode CRPCProtocol::Unimplemented;
+constexpr CRPCProtocol_ErrorCode CRPCProtocol::InvalidArgument;
 constexpr CRPCProtocol_ErrorCode CRPCProtocol::ErrorCode_MIN;
 constexpr CRPCProtocol_ErrorCode CRPCProtocol::ErrorCode_MAX;
 constexpr int CRPCProtocol::ErrorCode_ARRAYSIZE;

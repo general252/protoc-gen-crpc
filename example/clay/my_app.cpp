@@ -19,12 +19,12 @@ class myGreeterServiceImpl : public GreeterServiceImpl
 public:
 
   
-    virtual void SayHello(const helloworld::HelloRequest& request,  helloworld::HelloReply& response) {
-
+    virtual helloworld::CRPCProtocol_ErrorCode SayHello(const helloworld::HelloRequest& request,  helloworld::HelloReply& response) {
+        return helloworld::CRPCProtocol_ErrorCode_OK;;
     }
   
-    virtual void Hello(const helloworld::A& request,  helloworld::B& response) {
-
+    virtual helloworld::CRPCProtocol_ErrorCode Hello(const helloworld::A& request,  helloworld::B& response) {
+        return helloworld::CRPCProtocol_ErrorCode_OK;;
     }
   
 

@@ -1,25 +1,25 @@
 
+
 #ifdef _MSC_VER
-#define {{.ExportHeader}}_EXPORTS
+#define HELLOWORLD_EXPORTS
 #endif // _MSC_VER
 
-#include "app.h"
-#include "{{.GeneratedFilenamePrefix}}.pb.h"
-#include "{{.GeneratedFilenamePrefix}}_service.h"
-#include "{{.GeneratedFilenamePrefix}}_client.h"
+#include "helloworld_export.h"
+#include "helloworld.pb.h"
+#include "helloworld_service.h"
 
 
 #define set_callback_on_event  "set_callback_on_event"
 #define set_callback_on_server "set_callback_on_server"
 #define on_service_data        "on_service_data"
 
-typedef int32_t(*FnMethod)(char* data, int32_t length);
+typedef int32_t (*FnMethod)(char* data, int32_t length);
 
 FnMethod on_callback = 0;
 FnMethod on_server = 0;
 
 
-void cpp_on_invoke(const {{.PacketName}}::CRPCProtocol& request, {{.PacketName}}::CRPCProtocol& response)
+helloworld::CRPCProtocol_ErrorCode cpp_on_invoke(helloworld::CRPCProtocol& request, helloworld::CRPCProtocol& response)
 {
     if (on_callback) {
         response.set_method(request.method());
@@ -31,8 +31,11 @@ void cpp_on_invoke(const {{.PacketName}}::CRPCProtocol& request, {{.PacketName}}
 
         std::string data = response.SerializeAsString();
 
-        on_callback((char*)data.data(), data.size());
+        int32_t rc = on_callback((char*)data.data(), data.size());
+        return (helloworld::CRPCProtocol_ErrorCode)rc;
     }
+
+    return helloworld::CRPCProtocol_ErrorCode_OK;
 }
 
 
@@ -52,66 +55,79 @@ void cpp_invoke_callback(void* arg, const char* payload, int32_t payloadLen) {
 }
 
 
-void cpp_invoke({{.PacketName}}::CRPCProtocol& request, {{.PacketName}}::CRPCProtocol& response)
+helloworld::CRPCProtocol_ErrorCode cpp_invoke(helloworld::CRPCProtocol& request, helloworld::CRPCProtocol& response)
 {
     if (!on_server) {
-        return;
+        return helloworld::CRPCProtocol_ErrorCode_NotInit;
     }
 
+    helloworld::CRPCProtocol_ErrorCode result = helloworld::CRPCProtocol_ErrorCode_Fail;
     uintptr_t handle = (uintptr_t)cpp_invoke_callback;
 
     JsonTag* tag = new JsonTag();
     tag->body.assign("hello");
 
-    {
-        {{.PacketName}}::CRPCProtocol_Inner* inner = request.mutable_inner();
+    do {
+        helloworld::CRPCProtocol_Inner* inner = request.mutable_inner();
         inner->set_callback(handle);
         inner->set_method(on_service_data);
         inner->set_callbackargs((uint64_t)tag);
 
         std::string data = request.SerializeAsString();
 
-        on_server((char*)data.data(), data.size());
+        int32_t rc = on_server((char*)data.data(), data.size());
+        if ((helloworld::CRPCProtocol_ErrorCode)rc != helloworld::CRPCProtocol_ErrorCode_OK) {
+            result = (helloworld::CRPCProtocol_ErrorCode)rc;
+            break;
+        }
 
         if (!response.ParseFromString(tag->body)) {
             printf("parse app response fail.\n");
+            result = helloworld::CRPCProtocol_ErrorCode_Fail;
+            break;
         }
         else {
             // printf("C recv: debug string: %s\n", response.DebugString().data());
         }
-    }
+
+        result = helloworld::CRPCProtocol_ErrorCode_OK;
+    } while(0);
 
     delete tag;
+
+    return result;
 }
 
 
-{{.ExportHeader}}_API int crpc_call(char* data, int32_t length)
+HELLOWORLD_API int crpc_call(char* data, int32_t length)
 {
-    {{.PacketName}}::CRPCProtocol request;
+    helloworld::CRPCProtocol request;
     if (!request.ParseFromArray(data, length)) {
         printf("parse CRPCProtocol fail.\n");
-        return -1;
+        return helloworld::CRPCProtocol_ErrorCode_InvalidArgument;
     }
 
-    {{.PacketName}}::CRPCProtocol response;
+    helloworld::CRPCProtocol response;
 
     if (request.has_inner())
     {
-        const {{.PacketName}}::CRPCProtocol_Inner& inner = request.inner();
+        const helloworld::CRPCProtocol_Inner& inner = request.inner();
 
         if (0 == strcmp(set_callback_on_event, inner.method().data())) {
+           // 回复上层
             on_callback = (FnMethod)inner.callback();
-            response.set_code({{.PacketName}}::CRPCProtocol_ErrorCode_OK);
+            response.set_code(helloworld::CRPCProtocol_ErrorCode_OK);
         }
         else if (0 == strcmp(set_callback_on_server, inner.method().data())) {
+           // 调用上层的服务
             on_server = (FnMethod)inner.callback();
             if (on_server) {
-              {{range .Services}}
-                Set{{.ServiceName}}ClinetInvoke(cpp_invoke);
-              {{end}}
+              
+                SetGreeterClinetInvoke(cpp_invoke);
+              
             }
 
-            response.set_code({{.PacketName}}::CRPCProtocol_ErrorCode_OK);
+            response.set_code(helloworld::CRPCProtocol_ErrorCode_OK);
         }
         else if (0 == strcmp(on_service_data, inner.method().data())) {
             // 收到上层的回复
@@ -119,27 +135,27 @@ void cpp_invoke({{.PacketName}}::CRPCProtocol& request, {{.PacketName}}::CRPCPro
             if (fn) {
                 fn((void*)inner.callbackargs(), data, length);
             }
-            return 0;
+            return helloworld::CRPCProtocol_ErrorCode_OK;;
         } else {
-            response.set_code({{.PacketName}}::CRPCProtocol_ErrorCode_Fail);
+            response.set_code(helloworld::CRPCProtocol_ErrorCode_Fail);
             response.set_msg("unknown method " + inner.method());
         }
 
-        cpp_on_invoke(request, response);
-        return 0;
+        return cpp_on_invoke(request, response);
     }
     else
     {
-      {{range .Services}}
-        if (std::string::npos != request.method().find("/{{.PacketName}}.{{.ServiceName}}/")) {
-            Get{{.ServiceName}}ServiceImpl()->OnInvoke(request, response);
-            cpp_on_invoke(request, response);
-            return 0;
+      
+        if (std::string::npos != request.method().find("/helloworld.Greeter/")) {
+            GetGreeterServiceImpl()->OnInvoke(request, response, cpp_on_invoke);
+            return helloworld::CRPCProtocol_ErrorCode_OK;;
         }
-      {{end}}
+      
 
-        response.set_code({{.PacketName}}::CRPCProtocol_ErrorCode_Unimplemented);
+        response.set_code(helloworld::CRPCProtocol_ErrorCode_Unimplemented);
         response.set_msg("unknown service " + request.method());
-        return 0;
+        return helloworld::CRPCProtocol_ErrorCode_OK;;
     }
 }
+
+

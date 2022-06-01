@@ -1,6 +1,11 @@
-#pragma once
+#ifndef __{{.ExportHeader}}_SERVICE_H__
+#define __{{.ExportHeader}}_SERVICE_H__
 
 #include "{{.GeneratedFilenamePrefix}}.pb.h"
+
+typedef {{.PacketName}}::CRPCProtocol_ErrorCode (*fn_cpp_invoke)({{.PacketName}}::CRPCProtocol& request, {{.PacketName}}::CRPCProtocol& response);
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 {{range .Services}}
 
@@ -8,11 +13,11 @@ class {{.ServiceName}}ServiceImpl
 {
 public:
   {{range .Methods}}
-    virtual void {{.MethodName}}(const {{.PacketName}}::{{.Input}}& request,  {{.PacketName}}::{{.Output}}& response);
+    virtual {{.PacketName}}::CRPCProtocol_ErrorCode {{.MethodName}}(const {{.PacketName}}::{{.Input}}& request,  {{.PacketName}}::{{.Output}}& response);
   {{end}}
 
 public:
-  void OnInvoke(const {{.PacketName}}::CRPCProtocol& request, {{.PacketName}}::CRPCProtocol& response);
+  void OnInvoke({{.PacketName}}::CRPCProtocol& request, {{.PacketName}}::CRPCProtocol& response, fn_cpp_invoke on_invoke);
 };
 
 {{.ServiceName}}ServiceImpl* Get{{.ServiceName}}ServiceImpl();
@@ -20,3 +25,34 @@ void Set{{.ServiceName}}ServiceImpl({{.ServiceName}}ServiceImpl* ins);
 
 {{end}}
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+{{range .Services}}
+
+class {{.ServiceName}}Client
+{
+public:
+    {{.ServiceName}}Client() { invoke = 0; }
+    fn_cpp_invoke invoke;
+
+private:
+    {{.PacketName}}::CRPCProtocol_ErrorCode m_invoke(const std::string& method, const google::protobuf::Message& request, google::protobuf::Message& response);
+
+public:
+  {{range .Methods}}
+    {{.PacketName}}::CRPCProtocol_ErrorCode {{.MethodName}}(const {{.PacketName}}::{{.Input}}& request, {{.PacketName}}::{{.Output}}& response);
+  {{end}}
+};
+
+
+{{.ServiceName}}Client* Get{{.ServiceName}}Clinet();
+void Set{{.ServiceName}}ClinetInvoke(fn_cpp_invoke invoke);
+
+{{end}}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+#endif //  __{{.ExportHeader}}_SERVICE_H__

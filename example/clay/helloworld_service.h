@@ -1,7 +1,12 @@
 
-#pragma once
+#ifndef __HELLOWORLD_SERVICE_H__
+#define __HELLOWORLD_SERVICE_H__
 
 #include "helloworld.pb.h"
+
+typedef helloworld::CRPCProtocol_ErrorCode (*fn_cpp_invoke)(helloworld::CRPCProtocol& request, helloworld::CRPCProtocol& response);
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -9,13 +14,13 @@ class GreeterServiceImpl
 {
 public:
   
-    virtual void SayHello(const helloworld::HelloRequest& request,  helloworld::HelloReply& response);
+    virtual helloworld::CRPCProtocol_ErrorCode SayHello(const helloworld::HelloRequest& request,  helloworld::HelloReply& response);
   
-    virtual void Hello(const helloworld::A& request,  helloworld::B& response);
+    virtual helloworld::CRPCProtocol_ErrorCode Hello(const helloworld::A& request,  helloworld::B& response);
   
 
 public:
-  void OnInvoke(const helloworld::CRPCProtocol& request, helloworld::CRPCProtocol& response);
+  void OnInvoke(helloworld::CRPCProtocol& request, helloworld::CRPCProtocol& response, fn_cpp_invoke on_invoke);
 };
 
 GreeterServiceImpl* GetGreeterServiceImpl();
@@ -23,5 +28,38 @@ void SetGreeterServiceImpl(GreeterServiceImpl* ins);
 
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+class GreeterClient
+{
+public:
+    GreeterClient() { invoke = 0; }
+    fn_cpp_invoke invoke;
+
+private:
+    helloworld::CRPCProtocol_ErrorCode m_invoke(const std::string& method, const google::protobuf::Message& request, google::protobuf::Message& response);
+
+public:
+  
+    helloworld::CRPCProtocol_ErrorCode SayHello(const helloworld::HelloRequest& request, helloworld::HelloReply& response);
+  
+    helloworld::CRPCProtocol_ErrorCode Hello(const helloworld::A& request, helloworld::B& response);
+  
+};
+
+
+GreeterClient* GetGreeterClinet();
+void SetGreeterClinetInvoke(fn_cpp_invoke invoke);
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+#endif //  __HELLOWORLD_SERVICE_H__
 
 

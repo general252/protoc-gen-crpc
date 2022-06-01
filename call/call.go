@@ -146,8 +146,8 @@ func (c *Library) OnCall(res *CRPCProtocol) error {
 	inLen := C.int32_t(len(data))
 
 	var r = C.call_method(C.uintptr_t(c.fnCall), in, inLen)
-	if r != 0 {
-		return errors.New(fmt.Sprintf("error result: %v", r))
+	if r != CRPCProtocol_OK {
+		return errors.New(fmt.Sprintf("error result: %v", CRPCProtocol_ErrorCode(r)))
 	}
 
 	return nil
@@ -171,8 +171,8 @@ func (c *Library) Call(req *CRPCProtocol) (*CRPCProtocol, error) {
 	inLen := C.int32_t(len(data))
 
 	var r = C.call_method(C.uintptr_t(c.fnCall), in, inLen)
-	if r != 0 {
-		return nil, errors.New(fmt.Sprintf("error result: %v", r))
+	if r != CRPCProtocol_OK {
+		return nil, errors.New(fmt.Sprintf("error result: %v", CRPCProtocol_ErrorCode(r)))
 	}
 
 	if res == nil {

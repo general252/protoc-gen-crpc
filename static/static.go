@@ -13,18 +13,18 @@ func GetGoTpl() string {
 	return string(helloGoTpl)
 }
 
-//go:embed clay/app.h
-var appH []byte
+//go:embed clay/export.h
+var exportH []byte
 
-func GetAppH() string {
-	return string(appH)
+func GetExportH() string {
+	return string(exportH)
 }
 
-//go:embed clay/app.cpp
-var appCPP []byte
+//go:embed clay/export.cpp
+var exportCPP []byte
 
-func GetAppCpp() string {
-	return string(appCPP)
+func GetExportCpp() string {
+	return string(exportCPP)
 }
 
 //go:embed clay/service.h
@@ -39,20 +39,6 @@ var serviceCPP []byte
 
 func GetServiceCpp() string {
 	return string(serviceCPP)
-}
-
-//go:embed clay/client.h
-var clientH []byte
-
-func GetClientH() string {
-	return string(clientH)
-}
-
-//go:embed clay/client.cpp
-var clientCPP []byte
-
-func GetClientCpp() string {
-	return string(clientCPP)
 }
 
 //go:embed clay/my_app.cpp
