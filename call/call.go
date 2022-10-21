@@ -159,6 +159,7 @@ func (c *Library) Call(req *CRPCProtocol) (*CRPCProtocol, error) {
 	h := cgo.NewHandle(func(response *CRPCProtocol) {
 		res = response
 	})
+	defer h.Delete()
 
 	req.FunHandle = uint64(h)
 
