@@ -8,7 +8,7 @@ package dlsym
 #include <limits.h>
 #include <stdlib.h>
 #include <stdint.h>
-
+#include <inttypes.h>
 #include <stdio.h>
 
 static uintptr_t dlsymOpen(const char* path, char** err) {
@@ -16,7 +16,7 @@ static uintptr_t dlsymOpen(const char* path, char** err) {
 	if (h == NULL) {
 		*err = (char*)dlerror();
 	} else {
-		printf("library handle: %llX\n", (uintptr_t)h);
+		printf("library handle: %" PRId64 "\n", (uintptr_t)h);
 	}
 
 	return (uintptr_t)h;
@@ -25,14 +25,14 @@ static uintptr_t dlsymOpen(const char* path, char** err) {
 static uintptr_t dlsymLookup(uintptr_t h, const char* name, char** err) {
 	void* r = dlsym((void*)h, name);
 	if (r == NULL) {
-		printf("lib handle: %llX name: %s\n", h, name);
+		printf("lib handle: %" PRId64 " name: %s\n", h, name);
 		*err = (char*)dlerror();
 	}
 	return (uintptr_t)r;
 }
 
 static int dlsymClose(uintptr_t h) {
-	printf("library handle close: %llX\n", h);
+	printf("library handle close: %" PRId64 "\n", h);
 	dlclose((void*)h);
 	return 0;
 }
