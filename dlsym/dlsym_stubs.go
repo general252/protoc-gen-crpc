@@ -11,7 +11,7 @@ package dlsym
 #include <inttypes.h>
 #include <stdio.h>
 
-staitc uintptr_t dlsymSetEnv(const char* key, const char* value) {
+static uintptr_t dlsymSetEnv(const char* key, const char* value) {
 	setenv(key, value, 1);
 	printf(">>> LD_LIBRARY_PATH: %s\n", getenv("LD_LIBRARY_PATH"));
 }
