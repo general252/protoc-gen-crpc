@@ -46,8 +46,8 @@ public:
 };
 
 
-{{.ServiceName}}Client* Get{{.ServiceName}}Clinet();
-void Set{{.ServiceName}}ClinetInvoke(fn_cpp_invoke invoke);
+{{.ServiceName}}Client* Get{{.ServiceName}}Client();
+void Set{{.ServiceName}}ClientInvoke(fn_cpp_invoke invoke);
 
 {{end}}
 

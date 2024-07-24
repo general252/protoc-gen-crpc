@@ -122,7 +122,7 @@ void cpp_invoke_callback(void* arg, const char* payload, int32_t payloadLen) {
             on_server = (FnMethod)inner.callback();
             if (on_server) {
               {{range .Services}}
-                Set{{.ServiceName}}ClinetInvoke(cpp_invoke);
+                Set{{.ServiceName}}ClientInvoke(cpp_invoke);
               {{end}}
             }
 

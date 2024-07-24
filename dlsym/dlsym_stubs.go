@@ -46,6 +46,7 @@ import "C"
 
 import (
 	"errors"
+	"os"
 	"path/filepath"
 	"unsafe"
 )

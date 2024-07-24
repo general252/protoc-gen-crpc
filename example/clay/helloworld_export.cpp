@@ -123,7 +123,7 @@ HELLOWORLD_API int crpc_call(char* data, int32_t length)
             on_server = (FnMethod)inner.callback();
             if (on_server) {
               
-                SetGreeterClinetInvoke(cpp_invoke);
+                SetGreeterClientInvoke(cpp_invoke);
               
             }
 

@@ -27,7 +27,7 @@ public:
         helloworld::CRPCProtocol out;
         a.set_a("this is a");
 
-        auto r = GetGreeterClinet()->Hello(a, b, &out);
+        auto r = GetGreeterClient()->Hello(a, b, &out);
         printf("r: %d, [%s] %s\n", r, out.msg().data(), b.b().data());
 
         return helloworld::CRPCProtocol_ErrorCode_OK;;

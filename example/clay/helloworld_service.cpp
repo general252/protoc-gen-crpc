@@ -99,11 +99,11 @@ helloworld::CRPCProtocol_ErrorCode GreeterServiceImpl::Hello(const helloworld::A
 
 
 static GreeterClient insGreeterClient;
-GreeterClient* GetGreeterClinet() {
+GreeterClient* GetGreeterClient() {
     return &insGreeterClient;
 }
 
-void SetGreeterClinetInvoke(fn_cpp_invoke invoke) {
+void SetGreeterClientInvoke(fn_cpp_invoke invoke) {
     insGreeterClient.invoke = invoke;
 }
 

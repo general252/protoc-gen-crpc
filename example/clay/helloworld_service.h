@@ -51,8 +51,8 @@ public:
 };
 
 
-GreeterClient* GetGreeterClinet();
-void SetGreeterClinetInvoke(fn_cpp_invoke invoke);
+GreeterClient* GetGreeterClient();
+void SetGreeterClientInvoke(fn_cpp_invoke invoke);
 
 
 

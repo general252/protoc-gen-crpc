@@ -71,11 +71,11 @@ void {{.ServiceName}}ServiceImpl::OnInvoke({{.PacketName}}::CRPCProtocol& reques
 {{range .Services}}
 
 static {{.ServiceName}}Client ins{{.ServiceName}}Client;
-{{.ServiceName}}Client* Get{{.ServiceName}}Clinet() {
+{{.ServiceName}}Client* Get{{.ServiceName}}Client() {
     return &ins{{.ServiceName}}Client;
 }
 
-void Set{{.ServiceName}}ClinetInvoke(fn_cpp_invoke invoke) {
+void Set{{.ServiceName}}ClientInvoke(fn_cpp_invoke invoke) {
     ins{{.ServiceName}}Client.invoke = invoke;
 }
 
