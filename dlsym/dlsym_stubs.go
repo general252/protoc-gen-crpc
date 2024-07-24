@@ -11,11 +11,6 @@ package dlsym
 #include <inttypes.h>
 #include <stdio.h>
 
-static uintptr_t dlsymSetEnv(const char* key, const char* value) {
-	setenv(key, value, 1);
-	printf(">>> LD_LIBRARY_PATH: %s\n", getenv("LD_LIBRARY_PATH"));
-}
-
 static uintptr_t dlsymOpen(const char* path, char** err) {
 	void* h = dlopen(path, RTLD_NOW|RTLD_GLOBAL);
 	if (h == NULL) {
@@ -46,31 +41,13 @@ import "C"
 
 import (
 	"errors"
-	"os"
-	"path/filepath"
 	"unsafe"
 )
-
-func setEnv() {
-	dir := filepath.Dir(os.Args[0])
-	dir, _ = filepath.Abs(dir)
-	dir = filepath.ToSlash(dir)
-
-	key := C.CString("LD_LIBRARY_PATH")
-	defer C.free(unsafe.Pointer(key))
-
-	value := C.CString(dir)
-	defer C.free(unsafe.Pointer(value))
-
-	C.dlsymSetEnv(key, value)
-}
 
 func openSym(name string) (*DlSym, error) {
 	var cErr *C.char
 	in := C.CString(name)
 	defer C.free(unsafe.Pointer(in))
-
-	setEnv()
 
 	h := C.dlsymOpen(in, &cErr)
 	if h == 0 {
