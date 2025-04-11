@@ -4,11 +4,11 @@
 
 #ifdef  _MSC_VER
 #ifdef _DEBUG
-#pragma comment(lib, "lib/debug/lib/libprotobufd.lib")
-#pragma comment(lib, "lib/debug/lib/libprotobuf-lited.lib")
+#pragma comment(lib, "lib/lib/debug/lib/libprotobufd.lib")
+#pragma comment(lib, "lib/lib/debug/lib/libprotobuf-lited.lib")
 #else
-#pragma comment(lib, "lib/libprotobuf.lib")
-#pragma comment(lib, "lib/libprotobuf-lite.lib")
+#pragma comment(lib, "lib/lib/libprotobuf.lib")
+#pragma comment(lib, "lib/lib/libprotobuf-lite.lib")
 #endif // _DEBUG
 #endif
 
