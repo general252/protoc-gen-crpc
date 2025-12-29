@@ -1,44 +1,70 @@
+/*
+ *
+ * Copyright 2020 gRPC authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+// protoc-gen-go-grpc is a plugin for the Google protocol buffer compiler to
+// generate Go code. Install it by building this program and making it
+// accessible within your PATH with the name:
+//
+//	protoc-gen-go-grpc
+//
+// The 'go-grpc' suffix becomes part of the argument for the protocol compiler,
+// such that it can be invoked as:
+//
+//	protoc --go-grpc_out=. path/to/file.proto
+//
+// This generates Go service definitions for the protocol buffer defined by
+// file.proto.  With that input, the output will be written to:
+//
+//	path/to/file_grpc.pb.go
 package main
 
 import (
 	"flag"
 	"fmt"
-	"log"
-	"time"
 
 	"google.golang.org/protobuf/compiler/protogen"
+	"google.golang.org/protobuf/types/descriptorpb"
 	"google.golang.org/protobuf/types/pluginpb"
-
-	"github.com/general252/protoc-gen-crpc/static"
 )
 
-var requireUnimplemented *bool
+const version = "1.6.0"
 
-func init() {
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
-}
+var requireUnimplemented *bool
+var useGenericStreams *bool
 
 func main() {
-	for i := 0; i < 0; i++ {
-		time.Sleep(time.Second)
-		log.Println(i)
-	}
-
 	showVersion := flag.Bool("version", false, "print the version and exit")
 	flag.Parse()
 	if *showVersion {
-		fmt.Printf("protoc-gen-go-grpc %v\n", static.Version)
+		fmt.Printf("protoc-gen-go-grpc %v\n", version)
 		return
 	}
 
 	var flags flag.FlagSet
 	requireUnimplemented = flags.Bool("require_unimplemented_servers", true, "set to false to match legacy behavior")
-	_ = requireUnimplemented
+	useGenericStreams = flags.Bool("use_generic_streams_experimental", true, "set to true to use generic types for streaming client and server objects; this flag is EXPERIMENTAL and may be changed or removed in a future release")
 
 	protogen.Options{
 		ParamFunc: flags.Set,
 	}.Run(func(gen *protogen.Plugin) error {
-		gen.SupportedFeatures = uint64(pluginpb.CodeGeneratorResponse_FEATURE_PROTO3_OPTIONAL)
+		gen.SupportedFeatures = uint64(pluginpb.CodeGeneratorResponse_FEATURE_PROTO3_OPTIONAL) | uint64(pluginpb.CodeGeneratorResponse_FEATURE_SUPPORTS_EDITIONS)
+		gen.SupportedEditionsMinimum = descriptorpb.Edition_EDITION_PROTO2
+		gen.SupportedEditionsMaximum = descriptorpb.Edition_EDITION_2024
 		for _, f := range gen.Files {
 			if !f.Generate {
 				continue
