@@ -1,5 +1,6 @@
 
 default:
+	go mod tidy
 	go build -o ../bin/example.exe example.go
 
 run:
