@@ -1,12 +1,11 @@
-prefix=${pcfiledir}/../..
-
-exec_prefix=${prefix}
-libdir=${prefix}/lib
-includedir=${prefix}/include
+prefix=F:/Develop/SDK/protobuf3/install/x64-Release-shared
+exec_prefix=F:/Develop/SDK/protobuf3/install/x64-Release-shared
+libdir=F:/Develop/SDK/protobuf3/install/x64-Release-shared/lib
+includedir=F:/Develop/SDK/protobuf3/install/x64-Release-shared/include
 
 Name: Protocol Buffers
 Description: Google's Data Interchange Format
-Version: 3.19.4.0
-Libs: -L"${libdir}" -lprotobuf 
-Cflags: -I"${includedir}"
+Version: 3.21.9.0
+Libs: -L${libdir} -lprotobuf 
+Cflags: -I${includedir}
 Conflicts: protobuf-lite
