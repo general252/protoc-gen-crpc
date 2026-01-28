@@ -1,5 +1,5 @@
 
-﻿#ifndef __HELLOWORLD_EXPORT_H_
+#ifndef __HELLOWORLD_EXPORT_H_
 #define __HELLOWORLD_EXPORT_H_
 
 // g++ -fPIC -shared *.cpp *.cc -o clay.so -lprotobuf -lpthread -std=c++11

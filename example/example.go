@@ -4,7 +4,6 @@ import (
 	"context"
 	helloworld "example/golay"
 	"log"
-	"os"
 )
 
 func init() {
@@ -23,10 +22,10 @@ func (tis *GreeterServer) SayHello(_ context.Context, req *helloworld.HelloReque
 }
 
 func (tis *GreeterServer) Hello(ctx context.Context, req *helloworld.A) (*helloworld.B, error) {
-	log.Printf("recv %v", req.GetA())
+	log.Printf("recv [%v]", req.GetA())
 	return &helloworld.B{
 		B: "nb+" + req.GetA(),
-	}, os.ErrExist
+	}, nil
 }
 
 func main() {

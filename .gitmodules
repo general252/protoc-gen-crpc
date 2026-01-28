@@ -1,0 +1,4 @@
+[submodule "example/clay/3rdparty/protobuf/protobuf"]
+	path = example/clay/3rdparty/protobuf
+	url = https://github.com/protocolbuffers/protobuf.git
+	branch = v33.4

@@ -10,3 +10,4 @@
 /example/clay/dyc.h
 /bin/protoc-gen-crpc.exe
 /.idea
+/example/clay/build/

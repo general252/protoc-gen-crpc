@@ -1,5 +1,5 @@
 
-﻿
+
 #ifdef _MSC_VER
 #define HELLOWORLD_EXPORTS
 #endif // _MSC_VER
