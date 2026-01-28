@@ -1,4 +1,4 @@
-#ifndef __{{.ExportHeader}}_SERVICE_H__
+﻿#ifndef __{{.ExportHeader}}_SERVICE_H__
 #define __{{.ExportHeader}}_SERVICE_H__
 
 #include "{{.GeneratedFilenamePrefix}}.pb.h"

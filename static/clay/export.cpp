@@ -1,4 +1,4 @@
-
+﻿
 #ifdef _MSC_VER
 #define {{.ExportHeader}}_EXPORTS
 #endif // _MSC_VER

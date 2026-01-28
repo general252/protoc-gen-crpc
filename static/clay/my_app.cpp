@@ -1,4 +1,4 @@
-#include "{{.GeneratedFilenamePrefix}}_service.h"
+﻿#include "{{.GeneratedFilenamePrefix}}_service.h"
 
 
 #ifdef  _MSC_VER

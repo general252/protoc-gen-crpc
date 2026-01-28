@@ -11,16 +11,9 @@ static int32_t call_method(uintptr_t h, char* data, int32_t length) {
 	return ((FnMethod)h)(data, length);
 }
 
-int32_t FnOnEventGo(char* data, int32_t length);
-int32_t FnServerGo(char* data, int32_t length);
+extern int32_t FnOnEventGo(char* data, int32_t length);
+extern int32_t FnServerGo(char* data, int32_t length);
 
-static uintptr_t GetFnOnEventGo() {
-	return (uintptr_t)FnOnEventGo;
-}
-
-static uintptr_t GetFnServerGo() {
-	return (uintptr_t)FnServerGo;
-}
 */
 import "C"
 
@@ -213,7 +206,7 @@ func (c *Library) init() (err error) {
 	res, err := c.Call(&CRPCProtocol{
 		Inner: &CRPCProtocol_Inner{
 			Method:   set_callback_on_event,
-			Callback: uint64(C.GetFnOnEventGo()),
+			Callback: uint64(uintptr(unsafe.Pointer(C.FnOnEventGo))),
 		},
 	})
 	if err != nil {
@@ -227,7 +220,7 @@ func (c *Library) init() (err error) {
 	res, err = c.Call(&CRPCProtocol{
 		Inner: &CRPCProtocol_Inner{
 			Method:   set_callback_on_server,
-			Callback: uint64(C.GetFnServerGo()),
+			Callback: uint64(uintptr(unsafe.Pointer(C.FnServerGo))),
 		},
 	})
 	if err != nil {

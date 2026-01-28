@@ -1,4 +1,4 @@
-#ifndef __{{.ExportHeader}}_EXPORT_H_
+﻿#ifndef __{{.ExportHeader}}_EXPORT_H_
 #define __{{.ExportHeader}}_EXPORT_H_
 
 // g++ -fPIC -shared *.cpp *.cc -o clay.so -lprotobuf -lpthread -std=c++11
